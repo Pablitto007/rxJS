@@ -8,10 +8,12 @@ import {Observable} from 'rxjs/index';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  static numbers: number [] = [1, 2, 4];
-  title = 'rxJs';
+  private static numbers: number [] = [1, 2, 4];
+  private currValue: number;
+  private status: string = '';
+  private title = 'rxJs';
 
-  observableTest() {
+  observableTest(): void {
 
     const source$: Observable<number> = Observable.create(observer => {
       for (const i of AppComponent.numbers) {
@@ -31,7 +33,9 @@ export class AppComponent {
     );
   }
 
-  observableTimeoutTest() {
+  observableTimeoutTest(): void {
+    console.log(typeof this.currValue);
+    this.status = 'in progress';
 
     const source$ = Observable.create(obs => {
 
@@ -52,9 +56,10 @@ export class AppComponent {
       filter<number>(e => e < 6)
   );
     source$.subscribe(
-      value => console.log(`value: ${value}`),
+      /*value => console.log(`value: ${value}`),*/
+      value => this.currValue = value,
       err => console.log(`error: ${err}`),
-      () => console.log('complete')
+      () => this.status = 'completed'
     );
   }
 }
